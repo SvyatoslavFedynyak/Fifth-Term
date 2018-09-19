@@ -1,0 +1,6 @@
+F:\Visual Studio Projects\C#\Study\5 term\Numerical Methods\Lab1\Lab1\bin\Debug\Lab1.exe.config
+F:\Visual Studio Projects\C#\Study\5 term\Numerical Methods\Lab1\Lab1\bin\Debug\Lab1.exe
+F:\Visual Studio Projects\C#\Study\5 term\Numerical Methods\Lab1\Lab1\bin\Debug\Lab1.pdb
+F:\Visual Studio Projects\C#\Study\5 term\Numerical Methods\Lab1\Lab1\obj\Debug\Lab1.csprojResolveAssemblyReference.cache
+F:\Visual Studio Projects\C#\Study\5 term\Numerical Methods\Lab1\Lab1\obj\Debug\Lab1.exe
+F:\Visual Studio Projects\C#\Study\5 term\Numerical Methods\Lab1\Lab1\obj\Debug\Lab1.pdb

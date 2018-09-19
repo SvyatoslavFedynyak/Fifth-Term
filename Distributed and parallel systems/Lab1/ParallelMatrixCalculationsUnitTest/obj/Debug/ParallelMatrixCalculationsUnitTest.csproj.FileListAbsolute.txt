@@ -1,0 +1,9 @@
+F:\Visual Studio Projects\C#\Study\Distributed and parallel systems\Lab1\ParallelMatrixCalculationsUnitTest\bin\Debug\ParallelMatrixCalculationsUnitTest.dll
+F:\Visual Studio Projects\C#\Study\Distributed and parallel systems\Lab1\ParallelMatrixCalculationsUnitTest\bin\Debug\ParallelMatrixCalculationsUnitTest.pdb
+F:\Visual Studio Projects\C#\Study\Distributed and parallel systems\Lab1\ParallelMatrixCalculationsUnitTest\bin\Debug\Lab1.exe
+F:\Visual Studio Projects\C#\Study\Distributed and parallel systems\Lab1\ParallelMatrixCalculationsUnitTest\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+F:\Visual Studio Projects\C#\Study\Distributed and parallel systems\Lab1\ParallelMatrixCalculationsUnitTest\bin\Debug\Lab1.pdb
+F:\Visual Studio Projects\C#\Study\Distributed and parallel systems\Lab1\ParallelMatrixCalculationsUnitTest\bin\Debug\ru\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
+F:\Visual Studio Projects\C#\Study\Distributed and parallel systems\Lab1\ParallelMatrixCalculationsUnitTest\obj\Debug\ParallelMatrixCalculationsUnitTest.csprojResolveAssemblyReference.cache
+F:\Visual Studio Projects\C#\Study\Distributed and parallel systems\Lab1\ParallelMatrixCalculationsUnitTest\obj\Debug\ParallelMatrixCalculationsUnitTest.dll
+F:\Visual Studio Projects\C#\Study\Distributed and parallel systems\Lab1\ParallelMatrixCalculationsUnitTest\obj\Debug\ParallelMatrixCalculationsUnitTest.pdb
