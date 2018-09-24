@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Math;
 
-namespace Lab1
+namespace Lab_3
 {
     class Matrix
     {
@@ -80,59 +79,11 @@ namespace Lab1
             return sb.ToString();
         }
     }
-    static class DimetricalProectionBuilder
-    {
-        /*
-            * (cos(Q)  sin(Q)sin(f)  -sin(Q)cos(f)  0)
-            * (0         cos(f)          sin(f)     0)
-            * (sin(Q)  -cos(Q)sin(f) cos(Q)cos(f)   0)
-            * (0            0              0        1)
-            */
-        static double Q = -2.14;
-        static double f = -2.44;
-        static double[,] DimetricalMatrixarr = new double[,]
-        {
-                {Cos(Q), Sin(Q)*Sin(f), -Sin(Q)*Cos(f), 0 },
-                {0, Cos(f), Sin(f), 0 },
-                {Sin(Q), -Cos(Q)*Sin(f), Cos(Q)*Cos(f), 0 },
-                {0, 0, 0, 1 }
-        };
-        static Matrix DimetricalMatrix = new Matrix(DimetricalMatrixarr);
-        static DimetricalProectionBuilder()
-        {
-
-        }
-        public static Matrix Build(Matrix target)
-        {
-            return target * DimetricalMatrix;
-        }
-
-    }
-    class CuttedCube
-    {
-        public Matrix[] cubeMatrix = new Matrix[8];
-        public CuttedCube()
-        {
-            cubeMatrix[0] = new Matrix(new double[,] { { 6, 0, 6, 1 } });
-            cubeMatrix[1] = new Matrix(new double[,] { { 6, 0, 0, 1 } });
-            cubeMatrix[2] = new Matrix(new double[,] { { 0, 0, 6, 1 } });
-            cubeMatrix[3] = new Matrix(new double[,] { { 0, 0, 0, 1 } });
-            cubeMatrix[4] = new Matrix(new double[,] { { 0, 6, 0, 1 } });
-            cubeMatrix[5] = new Matrix(new double[,] { { 0, 6, 6, 1 } });
-            cubeMatrix[6] = new Matrix(new double[,] { { 3, 6, 0, 1 } });
-            cubeMatrix[7] = new Matrix(new double[,] { { 3, 6, 6, 1 } });
-        }
-    }
     class Program
     {
         static void Main(string[] args)
         {
-            CuttedCube shape = new CuttedCube();
-            for (int i = 0; i < 8; i++)
-            {
-                Console.WriteLine((DimetricalProectionBuilder.Build(shape.cubeMatrix[i]).ToString())); 
-            }
-            Console.ReadLine();
+
         }
     }
 }
