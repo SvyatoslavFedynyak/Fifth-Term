@@ -73,7 +73,7 @@ namespace Lab1
             {
                 for (int j = 0; j < numOfColls; j++)
                 {
-                    sb.AppendFormat($"{items[i, j]} ");
+                    sb.AppendFormat($"{Math.Round(items[i, j], 2)} ");
                 }
                 sb.AppendLine();
             }
@@ -88,23 +88,29 @@ namespace Lab1
             * (sin(Q)  -cos(Q)sin(f) cos(Q)cos(f)   0)
             * (0            0              0        1)
             */
-        static double Q = -2.14;
-        static double f = -2.44;
-        static double[,] DimetricalMatrixarr = new double[,]
-        {
-                {Cos(Q), Sin(Q)*Sin(f), -Sin(Q)*Cos(f), 0 },
-                {0, Cos(f), Sin(f), 0 },
-                {Sin(Q), -Cos(Q)*Sin(f), Cos(Q)*Cos(f), 0 },
-                {0, 0, 0, 1 }
-        };
-        static Matrix DimetricalMatrix = new Matrix(DimetricalMatrixarr);
+        //f2 = -10.12
+        //q2 = -5.28
+        //f3 = 5.58
+        //q3 = 10.42
         static DimetricalProectionBuilder()
         {
 
         }
-        public static Matrix Build(Matrix target)
+        static private double GetQ(double f)
         {
-            return target * DimetricalMatrix;
+            return Asin(Sqrt(Pow(Cos(f), 2) / (1 - Pow(Cos(f), 2))));      
+        }
+        public static Matrix Build(Matrix target, double f)
+        {
+            double Q = GetQ(f);
+            Matrix dimetricalBuildMatrix = new Matrix(new double[,]
+                {
+                    {Cos(Q), Sin(Q)*Sin(f), 0, 0 },
+                    {0, Cos(f), 0, 0 },
+                    {Sin(Q), -Cos(Q)*Sin(f), 0, 0 },
+                    {0, 0, 0, 1 }
+                });
+            return target * dimetricalBuildMatrix;
         }
 
     }
@@ -130,7 +136,7 @@ namespace Lab1
             CuttedCube shape = new CuttedCube();
             for (int i = 0; i < 8; i++)
             {
-                Console.WriteLine((DimetricalProectionBuilder.Build(shape.cubeMatrix[i]).ToString())); 
+                Console.WriteLine((DimetricalProectionBuilder.Build(shape.cubeMatrix[i], 2).ToString()));
             }
             Console.ReadLine();
         }
