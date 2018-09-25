@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab1", "Lab1\Lab1.csproj", "{C7075F1C-66D3-47CB-A8FD-5E3CE869FA58}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphicalView", "GraphicalView\GraphicalView.csproj", "{B512ACB0-5EE5-4A0A-945E-A98D3AD750C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{C7075F1C-66D3-47CB-A8FD-5E3CE869FA58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7075F1C-66D3-47CB-A8FD-5E3CE869FA58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7075F1C-66D3-47CB-A8FD-5E3CE869FA58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B512ACB0-5EE5-4A0A-945E-A98D3AD750C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B512ACB0-5EE5-4A0A-945E-A98D3AD750C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B512ACB0-5EE5-4A0A-945E-A98D3AD750C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B512ACB0-5EE5-4A0A-945E-A98D3AD750C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

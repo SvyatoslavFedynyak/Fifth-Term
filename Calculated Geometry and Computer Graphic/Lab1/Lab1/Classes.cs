@@ -7,7 +7,7 @@ using static System.Math;
 
 namespace Lab1
 {
-    class Matrix
+    public class Matrix
     {
         int numOfRows;
         int numOfColls;
@@ -80,7 +80,7 @@ namespace Lab1
             return sb.ToString();
         }
     }
-    static class DimetricalProectionBuilder
+    public static class DimetricalProectionBuilder
     {
         /*
             * (cos(Q)  sin(Q)sin(f)  -sin(Q)cos(f)  0)
@@ -98,7 +98,7 @@ namespace Lab1
         }
         static private double GetQ(double f)
         {
-            return Asin(Sqrt(Pow(Cos(f), 2) / (1 - Pow(Cos(f), 2))));      
+            return Asin(Sqrt(Pow(Cos(f), 2) / (1 - Pow(Cos(f), 2))));
         }
         public static Matrix Build(Matrix target, double f)
         {
@@ -114,22 +114,26 @@ namespace Lab1
         }
 
     }
-    class CuttedCube
+    public class CuttedCube
     {
         public Matrix[] cubeMatrix = new Matrix[8];
         public CuttedCube()
         {
-            cubeMatrix[0] = new Matrix(new double[,] { { 6, 0, 6, 1 } });
-            cubeMatrix[1] = new Matrix(new double[,] { { 6, 0, 0, 1 } });
-            cubeMatrix[2] = new Matrix(new double[,] { { 0, 0, 6, 1 } });
-            cubeMatrix[3] = new Matrix(new double[,] { { 0, 0, 0, 1 } });
-            cubeMatrix[4] = new Matrix(new double[,] { { 0, 6, 0, 1 } });
-            cubeMatrix[5] = new Matrix(new double[,] { { 0, 6, 6, 1 } });
-            cubeMatrix[6] = new Matrix(new double[,] { { 3, 6, 0, 1 } });
-            cubeMatrix[7] = new Matrix(new double[,] { { 3, 6, 6, 1 } });
+            cubeMatrix[0] = new Matrix(new double[,] { { 3, 6, 0, 1 } });//A1
+            cubeMatrix[1] = new Matrix(new double[,] { { 3, 6, 6, 1 } });//A2
+            cubeMatrix[2] = new Matrix(new double[,] { { 0, 6, 6, 1 } });//A3
+            cubeMatrix[3] = new Matrix(new double[,] { { 0, 6, 0, 1 } });//A4
+            cubeMatrix[4] = new Matrix(new double[,] { { 6, 0, 0, 1 } });//A5
+            cubeMatrix[5] = new Matrix(new double[,] { { 6, 0, 6, 1 } });//A6
+            cubeMatrix[6] = new Matrix(new double[,] { { 0, 0, 6, 1 } });//A7
+            cubeMatrix[7] = new Matrix(new double[,] { { 0, 0, 0, 1 } });//A8
+            /*
+             * LINES
+             * 
+             */
         }
     }
-    class Program
+    class Classes
     {
         static void Main(string[] args)
         {
