@@ -33,6 +33,7 @@
             this.AngleTextBox = new System.Windows.Forms.TextBox();
             this.GenerateButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.ErrorTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.MaketPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ProectionPictureBox)).BeginInit();
             this.SuspendLayout();
@@ -41,9 +42,10 @@
             // 
             this.MaketPictureBox.Location = new System.Drawing.Point(31, 27);
             this.MaketPictureBox.Name = "MaketPictureBox";
-            this.MaketPictureBox.Size = new System.Drawing.Size(320, 211);
+            this.MaketPictureBox.Size = new System.Drawing.Size(320, 210);
             this.MaketPictureBox.TabIndex = 0;
             this.MaketPictureBox.TabStop = false;
+            this.MaketPictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.MaketPictureBox_Paint);
             // 
             // ProectionPictureBox
             // 
@@ -52,6 +54,7 @@
             this.ProectionPictureBox.Size = new System.Drawing.Size(500, 250);
             this.ProectionPictureBox.TabIndex = 1;
             this.ProectionPictureBox.TabStop = false;
+            this.ProectionPictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.ProectionPictureBox_Paint);
             // 
             // AngleTextBox
             // 
@@ -70,6 +73,7 @@
             this.GenerateButton.TabIndex = 3;
             this.GenerateButton.Text = "Generate";
             this.GenerateButton.UseVisualStyleBackColor = true;
+            this.GenerateButton.Click += new System.EventHandler(this.GenerateButton_Click);
             // 
             // label1
             // 
@@ -81,11 +85,20 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "Angle";
             // 
+            // ErrorTextBox
+            // 
+            this.ErrorTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ErrorTextBox.Location = new System.Drawing.Point(22, 550);
+            this.ErrorTextBox.Name = "ErrorTextBox";
+            this.ErrorTextBox.Size = new System.Drawing.Size(500, 32);
+            this.ErrorTextBox.TabIndex = 5;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(534, 560);
+            this.ClientSize = new System.Drawing.Size(534, 598);
+            this.Controls.Add(this.ErrorTextBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.GenerateButton);
             this.Controls.Add(this.AngleTextBox);
@@ -107,6 +120,7 @@
         private System.Windows.Forms.TextBox AngleTextBox;
         private System.Windows.Forms.Button GenerateButton;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox ErrorTextBox;
     }
 }
 

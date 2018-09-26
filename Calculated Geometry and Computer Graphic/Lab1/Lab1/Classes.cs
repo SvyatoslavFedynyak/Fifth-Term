@@ -137,10 +137,12 @@ namespace Lab1
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Enter angle:");
+            double angle = Convert.ToDouble(Console.ReadLine());
             CuttedCube shape = new CuttedCube();
             for (int i = 0; i < 8; i++)
             {
-                Console.WriteLine((DimetricalProectionBuilder.Build(shape.cubeMatrix[i], 2).ToString()));
+                Console.WriteLine((DimetricalProectionBuilder.Build(shape.cubeMatrix[i], angle).ToString()));
             }
             Console.ReadLine();
         }
