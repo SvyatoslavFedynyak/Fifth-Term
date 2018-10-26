@@ -8,7 +8,16 @@ using static System.Math;
 namespace Lab1
 {
     // нормальний розподіл
-    struct StatisticValues
+    public struct UninterruptedStatisticValues
+    {
+        public Range mode, mediane;
+        public UninterruptedStatisticValues(Range mode, Range mediane)
+        {
+            this.mode = mode;
+            this.mediane = mediane;
+        }
+    }
+    public struct StatisticValues
     {
         public double medium, dispersion, fixedDispersion, mediumKvadr, fixedMediumKvadr, swing, mediane, mode, cvantil, variationCoef, assimetricCoef, ecscess;
         public StatisticValues(double medium, double dispersion, double fixedDispersion, double mediumKvadr, double fixedMediumKvadr, double swing,
@@ -28,11 +37,11 @@ namespace Lab1
             this.mediumKvadr = mediumKvadr;
         }
     }
-    enum StatisticVariableType
+    public enum StatisticVariableType
     {
         Discrete, Uninterrupted
     }
-    struct Range
+    public struct Range
     {
         public double begin, end;
         public Range(double begin, double end)
@@ -41,7 +50,7 @@ namespace Lab1
             this.end = end;
         }
     }
-    struct FunctionSlot
+    public struct FunctionSlot
     {
         public double value;
         public Range range;
@@ -51,7 +60,7 @@ namespace Lab1
             this.range = range;
         }
     }
-    class EmpiricalFunction
+    public class EmpiricalFunction
     {
         public FunctionSlot[] slots;
         public EmpiricalFunction() { }
@@ -69,17 +78,18 @@ namespace Lab1
             return sb.ToString();
         }
     }
-    class StatisticAnaliser
+    public class StatisticAnaliser
     {
-        StatisticVariableType type;
-        double[] data;
+        public StatisticVariableType type;
+        public double[] data;
 
-        double[] variationRow;
-        Dictionary<double, int> statisticalDistribution;
-        EmpiricalFunction empFunc;
-        StatisticValues numValues;
+        public double[] variationRow;
+        public Dictionary<double, int> statisticalDistribution;
+        public EmpiricalFunction empFunc;
+        public StatisticValues numValues;
 
-        Dictionary<Range, int> uninterruptedStatisticalDistribution;
+        public Dictionary<Range, int> uninterruptedStatisticalDistribution;
+        public UninterruptedStatisticValues unintNumValues;
 
 
         public StatisticAnaliser(double[] data, StatisticVariableType type)
@@ -88,15 +98,27 @@ namespace Lab1
             this.type = type;
 
             variationRow = new double[data.Length];
-            statisticalDistribution = new Dictionary<double, int>();
             empFunc = new EmpiricalFunction();
+
+            statisticalDistribution = new Dictionary<double, int>();
+            uninterruptedStatisticalDistribution = new Dictionary<Range, int>();
 
             BuildWariationRow();
             BuildstatisticalDistribution();
-            BuildEmpiricalFunction();
+
+            if (type == StatisticVariableType.Uninterrupted)
+            {
+                Console.WriteLine(BuildEmpiricalUninterrupted());
+            }
+            else
+            {
+                BuildEmpiricalFunction();
+            }
+
             CalculateNumericValues();
 
         }
+
         private void BuildstatisticalDistribution()
         {
             #region Discrete
@@ -120,29 +142,29 @@ namespace Lab1
             else
             {
                 int numOfInterval = 11;
-                int rangeLength = variationRow.Length / (numOfInterval - 1);
-                int remainderRange = variationRow.Length % (numOfInterval - 1);
-                int rowIndexer = 0, rangeBegin, count;
-
+                double swing = variationRow[variationRow.Length - 1] - variationRow[0];
+                double rangeLength = swing / (numOfInterval - 1);
+                double remainderRange = swing % (numOfInterval - 1);
+                int count = 0, index = 0;
                 for (int i = 0; i < numOfInterval - 1; i++)
                 {
                     count = 0;
-                    rangeBegin = rowIndexer;
                     do
                     {
-                        if (variationRow[rowIndexer] >= variationRow[i * rangeLength] && variationRow[rowIndexer] < variationRow[(i + 1) * rangeLength - 1]) 
+                        if (variationRow[index] < (i + 1) * rangeLength)
                         {
                             count++;
+                            index++;
                         }
                         else
                         {
                             break;
                         }
-                        rowIndexer++;
+
                     } while (true);
-                    uninterruptedStatisticalDistribution.Add(new Range(variationRow[rangeBegin], variationRow[rowIndexer]), count);
-                    rowIndexer++;
+                    uninterruptedStatisticalDistribution.Add(new Range(i * rangeLength, (i + 1) * rangeLength), count);
                 }
+                uninterruptedStatisticalDistribution.Add(new Range((numOfInterval - 1) * rangeLength, variationRow[variationRow.Length - 1]), variationRow.Length - 1 - index);
             }
 
             #endregion
@@ -172,6 +194,7 @@ namespace Lab1
             double medium, dispersion, fixedDispersion, mediumKvadr, fixedMediumKvadr,
                 swing, mediane, mode, cvantil, variationCoef, assimetricCoef, ecscess;
             double temp;
+            Range modeUinterrupted, medianeUniterrupted;
 
             #region Medium
             medium = 0;
@@ -217,14 +240,23 @@ namespace Lab1
             #endregion
 
             #region Mediane
-
-            if (variationRow.Length % 2 == 0)
+            mediane = 0;
+            medianeUniterrupted = new Range(0, 0);
+            if (type == StatisticVariableType.Discrete)
             {
-                mediane = 0.5 * (variationRow[variationRow.Length / 2] + variationRow[variationRow.Length / 2 + 1]);
+                if (variationRow.Length % 2 == 0)
+                {
+                    mediane = 0.5 * (variationRow[(variationRow.Length + 1) / 2] + variationRow[(variationRow.Length + 1) / 2 + 1]);
+                }
+                else
+                {
+                    mediane = variationRow[(variationRow.Length + 1) / 2];
+                }
             }
             else
             {
-                mediane = variationRow[(variationRow.Length + 1) / 2];
+                double findRange = variationRow[variationRow.Length - 1] / 2;
+                medianeUniterrupted = new Range(findRange - swing / 11, findRange + swing / 11);
             }
 
             #endregion
@@ -232,13 +264,29 @@ namespace Lab1
             #region Mode
 
             mode = 0;
-            temp = statisticalDistribution.Max(kvp => kvp.Value);
-            foreach (KeyValuePair<double, int> item in statisticalDistribution)
+            modeUinterrupted = new Range(0, 0);
+            if (type == StatisticVariableType.Discrete)
             {
-                if (item.Value == temp)
+                temp = statisticalDistribution.Max(kvp => kvp.Value);
+                foreach (KeyValuePair<double, int> item in statisticalDistribution)
                 {
-                    mode = item.Key;
-                    break;
+                    if (item.Value == temp)
+                    {
+                        mode = item.Key;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                temp = uninterruptedStatisticalDistribution.Max(kvp => kvp.Value);
+                foreach (KeyValuePair<Range, int> item in uninterruptedStatisticalDistribution)
+                {
+                    if (temp == item.Value)
+                    {
+                        modeUinterrupted = item.Key;
+                        break;
+                    }
                 }
             }
 
@@ -282,37 +330,81 @@ namespace Lab1
 
             numValues = new StatisticValues(medium, dispersion, fixedDispersion, mediumKvadr,
                 fixedMediumKvadr, swing, mediane, mode, cvantil, variationCoef, assimetricCoef, ecscess);
+            if (type == StatisticVariableType.Uninterrupted)
+            {
+                unintNumValues = new UninterruptedStatisticValues(modeUinterrupted, medianeUniterrupted);
+            }
         }
-
-
-
-        public bool CheckByPirson(double levelOfSignificance)
+        public string BuildEmpiricalUninterrupted()
         {
-            return false;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("F(x) = \n{\n");
+            foreach (KeyValuePair<Range, int> item in uninterruptedStatisticalDistribution)
+            {
+                sb.AppendFormat($"{Math.Round((item.Key.end - item.Key.begin) / item.Value, 2)}x, x є [{Math.Round(item.Key.begin, 2)}, {Math.Round(item.Key.end, 2)})\n");
+            }
+            sb.Append("}\n");
+            return sb.ToString();
         }
-
-
 
 
     }
-
-
-    class Program
+    public static class PirsonChecker
     {
-        static void FullArrayWithRandom(double[] array, int min, int max, Random randomiser)
+        //очікуваний розподіл: нормальний
+        private static double normalF(double value, StatisticAnaliser statistic)
+        {
+            double Q = statistic.numValues.mediumKvadr;
+            double u = statistic.numValues.medium;
+            return 1 / (Q * Sqrt(2 * PI)) * Pow(E, (-Pow(value - u, 2) / (2 * Q * Q)));
+        }
+        public static double Check(StatisticAnaliser statistic)
+        {
+            double x2 = 0, expected, temp = 0;
+            if (statistic.type == StatisticVariableType.Discrete)
+            {
+                foreach (KeyValuePair<double, int> item in statistic.statisticalDistribution)
+                {
+                    expected = statistic.variationRow.Length *  normalF(item.Key, statistic);
+                    x2 += Pow(item.Value - expected, 2) / expected;
+                }
+            }
+            else
+            {
+                double rangeValue = 0;
+                foreach (KeyValuePair<Range, int> item in statistic.uninterruptedStatisticalDistribution)
+                {
+                    rangeValue = /*item.Key.end - (item.Key.end - item.Key.begin)/2*/ item.Key.end;
+                    expected = normalF(rangeValue, statistic) * statistic.variationRow.Length;
+                    x2 += Pow(item.Value - expected, 2) / expected;
+                }
+            }
+
+            return x2;
+        }
+        public static bool IfTrue(double x2, double levelOf, int df)
+        {
+            return x2 <= MathNet.Numerics.Distributions.ChiSquared.InvCDF(df, 1 - levelOf);
+        }
+    }
+
+    public static class Functions
+    {
+        public static void FullArrayWithRandom(double[] array, int min, int max, Random randomiser)
         {
             for (int i = 0; i < array.Length; i++)
             {
-                array[i] = randomiser.Next(min, max);
+                array[i] = randomiser.Next(min, max + 1);
             }
         }
+    }
+
+    class Program
+    {
+
         static void Main(string[] args)
         {
-            double[] array = new double[100];
-            Random randomiser = new Random();
-            FullArrayWithRandom(array, 1, 10, randomiser);
-            StatisticAnaliser analiser = new StatisticAnaliser(array, StatisticVariableType.Discrete);
-
+            Console.WriteLine(MathNet.Numerics.Distributions.ChiSquared.InvCDF(5, 1 - 0.05));
             Console.ReadLine();
         }
     }
