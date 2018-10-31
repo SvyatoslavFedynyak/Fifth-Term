@@ -36,6 +36,14 @@ namespace InstansesLibrary
                 }
             }
         }
+        public int Coll
+        {
+            get { return numOfColls; }
+        }
+        public int Row
+        {
+            get { return numOfRows; }
+        }
         public Matrix(double[,] arr)
         {
             items = arr;
@@ -106,6 +114,29 @@ namespace InstansesLibrary
             }
             return sb.ToString();
         }
+        public string ToString(int degress)
+        {
+            StringBuilder sb = new StringBuilder();
+            string temp;
+            for (int i = 0; i < numOfRows; i++)
+            {
+                for (int j = 0; j < numOfColls; j++)
+                {
+                    if (items[i, j] == 0)
+                    {
+                        sb.Append("0.000 ");
+                    }
+                    else
+                    {
+                        sb.AppendFormat("{0:0.###} ", items[i, j]);
+                    }
+
+                }
+                sb.AppendLine();
+            }
+            return sb.ToString();
+        }
+
         public Matrix Copy()
         {
             Matrix result = new Matrix(numOfRows, numOfColls);
