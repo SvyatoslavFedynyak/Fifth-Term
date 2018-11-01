@@ -34,6 +34,10 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.refreshButton = new System.Windows.Forms.Button();
+            this.gaussCheckBox = new System.Windows.Forms.CheckBox();
+            this.nyuthonCheckBox = new System.Windows.Forms.CheckBox();
+            this.originalCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.graphicPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -96,11 +100,60 @@
             this.label6.TabIndex = 6;
             this.label6.Text = "2";
             // 
+            // refreshButton
+            // 
+            this.refreshButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.refreshButton.Location = new System.Drawing.Point(578, 461);
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(133, 69);
+            this.refreshButton.TabIndex = 7;
+            this.refreshButton.Text = "Refresh";
+            this.refreshButton.UseVisualStyleBackColor = true;
+            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
+            // 
+            // gaussCheckBox
+            // 
+            this.gaussCheckBox.AutoSize = true;
+            this.gaussCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.gaussCheckBox.Location = new System.Drawing.Point(578, 255);
+            this.gaussCheckBox.Name = "gaussCheckBox";
+            this.gaussCheckBox.Size = new System.Drawing.Size(82, 28);
+            this.gaussCheckBox.TabIndex = 8;
+            this.gaussCheckBox.Text = "Gauss";
+            this.gaussCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // nyuthonCheckBox
+            // 
+            this.nyuthonCheckBox.AutoSize = true;
+            this.nyuthonCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.nyuthonCheckBox.Location = new System.Drawing.Point(578, 134);
+            this.nyuthonCheckBox.Name = "nyuthonCheckBox";
+            this.nyuthonCheckBox.Size = new System.Drawing.Size(100, 28);
+            this.nyuthonCheckBox.TabIndex = 9;
+            this.nyuthonCheckBox.Text = "Nyuthon";
+            this.nyuthonCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // originalCheckBox
+            // 
+            this.originalCheckBox.AutoSize = true;
+            this.originalCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.originalCheckBox.Location = new System.Drawing.Point(578, 391);
+            this.originalCheckBox.Name = "originalCheckBox";
+            this.originalCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.originalCheckBox.Size = new System.Drawing.Size(94, 28);
+            this.originalCheckBox.TabIndex = 10;
+            this.originalCheckBox.Text = "Original";
+            this.originalCheckBox.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(593, 576);
+            this.ClientSize = new System.Drawing.Size(730, 576);
+            this.Controls.Add(this.originalCheckBox);
+            this.Controls.Add(this.nyuthonCheckBox);
+            this.Controls.Add(this.gaussCheckBox);
+            this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -123,6 +176,10 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button refreshButton;
+        private System.Windows.Forms.CheckBox gaussCheckBox;
+        private System.Windows.Forms.CheckBox nyuthonCheckBox;
+        private System.Windows.Forms.CheckBox originalCheckBox;
     }
 }
 

@@ -13,7 +13,7 @@ namespace Graphics
 {
     public partial class Form1 : Form
     {
-        double precision = 0.00001;
+        double precision = 0.001;
         int numOfPointInGraph = 500;
         double step = 0.004;
         double begin = 1, end = 3;
@@ -28,7 +28,7 @@ namespace Graphics
             backward = new Pair[numOfPointInGraph];
             buildOriginal();
             buildForward();
-            graphicPictureBox.Refresh();
+            buildBackward();
         }
         private Pair convertCoord(Pair value)
         {
@@ -41,22 +41,43 @@ namespace Graphics
             black.SetPixel(0, 0, Color.Black);
             Bitmap red = new Bitmap(1, 1);
             red.SetPixel(0, 0, Color.Red);
+            Bitmap blue = new Bitmap(1, 1);
+            blue.SetPixel(0, 0, Color.Blue);
             Pair location;
             #region Original
 
-            for (int i = 0; i < numOfPointInGraph; i++)
+            if (originalCheckBox.Checked)
             {
-                location = convertCoord(new Pair(original[i].x, original[i].y));
-                e.Graphics.DrawImage(black, new PointF((float)location.x, (float)location.y));
+                for (int i = 0; i < numOfPointInGraph; i++)
+                {
+                    location = convertCoord(new Pair(original[i].x, original[i].y));
+                    e.Graphics.DrawImage(black, new PointF((float)location.x, (float)location.y));
+                } 
             }
 
             #endregion
             #region Forward
 
-            for (int i = 0; i < numOfPointInGraph; i++)
+            if (gaussCheckBox.Checked)
             {
-                location = convertCoord(new Pair(forward[i].x, forward[i].y));
-                e.Graphics.DrawImage(red, new PointF((float)location.x, (float)location.y));
+                for (int i = 0; i < numOfPointInGraph; i++)
+                {
+                    location = convertCoord(new Pair(forward[i].x, forward[i].y));
+                    e.Graphics.DrawImage(red, new PointF((float)location.x, (float)location.y));
+                } 
+            }
+
+            #endregion
+
+            #region Backward
+
+            if (nyuthonCheckBox.Checked)
+            {
+                for (int i = 0; i < numOfPointInGraph; i++)
+                {
+                    location = convertCoord(new Pair(backward[i].x, backward[i].y));
+                    e.Graphics.DrawImage(blue, new PointF((float)location.x, (float)location.y));
+                } 
             }
 
             #endregion
@@ -78,6 +99,20 @@ namespace Graphics
             {
                 forward[i].x = begin + i * step;
                 forward[i].y = InterpolationBuilder.Calculate(original[i].x, precision);
+            }
+        }
+
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            graphicPictureBox.Refresh();
+        }
+
+        private void buildBackward()
+        {
+            for (int i = 0; i < numOfPointInGraph; i++)
+            {
+                backward[i].x = begin + i * step;
+                backward[i].y = InterpolationBuilder.CalculateBackward(original[i].x, precision);
             }
         }
     }
