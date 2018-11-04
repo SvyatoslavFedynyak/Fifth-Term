@@ -19,9 +19,9 @@ namespace Lab1
     }
     public struct StatisticValues
     {
-        public double medium, dispersion, fixedDispersion, mediumKvadr, fixedMediumKvadr, swing, mediane, mode, cvantil, variationCoef, assimetricCoef, ecscess;
+        public double medium, dispersion, fixedDispersion, mediumKvadr, fixedMediumKvadr, swing, mediane, mode, cvantil, variationCoef, assimetricCoef, ecscess, deviation, variance, standart, variation;
         public StatisticValues(double medium, double dispersion, double fixedDispersion, double mediumKvadr, double fixedMediumKvadr, double swing,
-           double mediane, double mode, double cvantil, double variationCoef, double assimetricCoef, double ecscess)
+           double mediane, double mode, double cvantil, double variationCoef, double assimetricCoef, double ecscess, double deviation, double variance, double standart, double variation)
         {
             this.medium = medium;
             this.mediane = mediane;
@@ -35,6 +35,10 @@ namespace Lab1
             this.swing = swing;
             this.variationCoef = variationCoef;
             this.mediumKvadr = mediumKvadr;
+            this.deviation = deviation;
+            this.variance = variance;
+            this.standart = standart;
+            this.variation = variation;
         }
     }
     public enum StatisticVariableType
@@ -48,6 +52,10 @@ namespace Lab1
         {
             this.begin = begin;
             this.end = end;
+        }
+        public override string ToString()
+        {
+            return string.Format($"{begin} - {end}");
         }
     }
     public struct FunctionSlot
@@ -87,9 +95,12 @@ namespace Lab1
         public Dictionary<double, int> statisticalDistribution;
         public EmpiricalFunction empFunc;
         public StatisticValues numValues;
+        public Dictionary<double, double> frequencyDistribution;
+
 
         public Dictionary<Range, int> uninterruptedStatisticalDistribution;
         public UninterruptedStatisticValues unintNumValues;
+        public Dictionary<Range, double> uninterruptedFrequencyDistribution;
 
 
         public StatisticAnaliser(double[] data, StatisticVariableType type)
@@ -102,9 +113,12 @@ namespace Lab1
 
             statisticalDistribution = new Dictionary<double, int>();
             uninterruptedStatisticalDistribution = new Dictionary<Range, int>();
+            frequencyDistribution = new Dictionary<double, double>();
+            uninterruptedFrequencyDistribution = new Dictionary<Range, double>();
 
             BuildWariationRow();
             BuildstatisticalDistribution();
+            BuildFrequencyDistribution();
 
             if (type == StatisticVariableType.Uninterrupted)
             {
@@ -193,16 +207,64 @@ namespace Lab1
         {
             double medium, dispersion, fixedDispersion, mediumKvadr, fixedMediumKvadr,
                 swing, mediane, mode, cvantil, variationCoef, assimetricCoef, ecscess;
+            double deviation, variance, standart, variation;
             double temp;
             Range modeUinterrupted, medianeUniterrupted;
 
             #region Medium
             medium = 0;
-            for (int i = 0; i < data.Length; i++)
+            if (type == StatisticVariableType.Discrete)
             {
-                medium += data[i];
+                for (int i = 0; i < data.Length; i++)
+                {
+                    medium += data[i];
+                }
+            }
+            else
+            {
+                foreach (KeyValuePair<Range, int> item in uninterruptedStatisticalDistribution)
+                {
+                    medium += item.Value * Functions.MedValue(item.Key);
+                }
             }
             medium /= data.Length;
+            #endregion
+
+            #region Deviation
+            deviation = 0;
+            if (type == StatisticVariableType.Discrete)
+            {
+                foreach (KeyValuePair<double, int> item in statisticalDistribution)
+                {
+                    deviation += item.Value * Pow((item.Key - medium), 2);
+                }
+            }
+            else
+            {
+                foreach (KeyValuePair<Range, int> item in uninterruptedStatisticalDistribution)
+                {
+                    deviation += item.Value * Pow((Functions.MedValue(item.Key)), 2);
+                }
+            }
+
+            #endregion
+
+            #region Variance
+
+            variance = deviation / (data.Length - 1);
+
+            #endregion
+
+            #region Standart
+
+            standart = Sqrt(variance);
+
+            #endregion
+
+            #region Variation
+
+            variation = standart / medium;
+
             #endregion
 
             #region Dispersion
@@ -223,7 +285,7 @@ namespace Lab1
 
             #region MediumKvadr
 
-            mediumKvadr = Sqrt(dispersion);
+            mediumKvadr = Sqrt(deviation / variationRow.Length);
 
             #endregion
 
@@ -306,33 +368,44 @@ namespace Lab1
 
             #region AssimetrionCoef
 
-            temp = 0;
-            for (int i = 0; i < variationRow.Length; i++)
-            {
-                temp += Pow((variationRow[i] - medium), 3);
-            }
-            temp /= variationRow.Length;
-            assimetricCoef = temp / Pow(fixedDispersion, 3);
+            assimetricCoef = Moment(medium, 3) / Pow(Moment(medium, 2), 1.5);
 
             #endregion
 
             #region Ecscess
 
-            temp = 0;
-            for (int i = 0; i < variationRow.Length; i++)
-            {
-                temp += Pow((variationRow[i] - medium), 4);
-            }
-            temp /= variationRow.Length;
-            ecscess = temp / Pow(fixedDispersion, 4);
+            ecscess = Moment(medium, 4) / Pow(Moment(medium, 2), 2) - 3;
 
             #endregion
 
             numValues = new StatisticValues(medium, dispersion, fixedDispersion, mediumKvadr,
-                fixedMediumKvadr, swing, mediane, mode, cvantil, variationCoef, assimetricCoef, ecscess);
+                fixedMediumKvadr, swing, mediane, mode, cvantil, variationCoef, assimetricCoef, ecscess, deviation, variance, standart, variation);
             if (type == StatisticVariableType.Uninterrupted)
             {
                 unintNumValues = new UninterruptedStatisticValues(modeUinterrupted, medianeUniterrupted);
+            }
+        }
+        public double Moment(double constant, int step)
+        {
+            double res = 0;
+            for (int i = 0; i < variationRow.Length; i++)
+            {
+                res += Pow((variationRow[i] - constant), step);
+            }
+            res /= variationRow.Length;
+            return res;
+        }
+        public double Quantil(int value, out bool present)
+        {
+            if (variationRow.Length % 4 == 0 && value < 4)
+            {
+                present = true;
+                return variationRow[value * variationRow.Length / 4 - 1];
+            }
+            else
+            {
+                present = false;
+                return 0;
             }
         }
         public string BuildEmpiricalUninterrupted()
@@ -346,26 +419,54 @@ namespace Lab1
             sb.Append("}\n");
             return sb.ToString();
         }
+        private void BuildFrequencyDistribution()
+        {
+            if (type == StatisticVariableType.Discrete)
+            {
+                foreach (KeyValuePair<double, int> item in statisticalDistribution)
+                {
+                    frequencyDistribution.Add(item.Key, (double)item.Value / data.Length);
+                }
+            }
+            else
+            {
+                foreach (KeyValuePair<Range, int> item in uninterruptedStatisticalDistribution)
+                {
+                    uninterruptedFrequencyDistribution.Add(item.Key, (double)item.Value / data.Length);
+                }
+            }
+        }
 
 
     }
     public static class PirsonChecker
     {
         //очікуваний розподіл: нормальний
-        private static double normalF(double value, StatisticAnaliser statistic)
+        static int k = 3;
+        private static double theoreticalValue(double value, StatisticAnaliser statistic)
         {
+            double h, n = statistic.variationRow.Length; ;
+            if (statistic.type == StatisticVariableType.Discrete)
+            {
+                h = 1;
+            }
+            else
+            {
+                h = statistic.variationRow.Length / statistic.uninterruptedStatisticalDistribution.Count;
+            }
+               
             double Q = statistic.numValues.mediumKvadr;
             double u = statistic.numValues.medium;
-            return 1 / (Q * Sqrt(2 * PI)) * Pow(E, (-Pow(value - u, 2) / (2 * Q * Q)));
+            return h * n * (1 / (Q * Sqrt(2 * PI)) * Pow(E, (-Pow(value - u, 2) / (2 * Q * Q))));
         }
         public static double Check(StatisticAnaliser statistic)
         {
-            double x2 = 0, expected, temp = 0;
+            double x2 = 0, expected;
             if (statistic.type == StatisticVariableType.Discrete)
             {
                 foreach (KeyValuePair<double, int> item in statistic.statisticalDistribution)
                 {
-                    expected = statistic.variationRow.Length *  normalF(item.Key, statistic);
+                    expected = theoreticalValue(item.Key, statistic);
                     x2 += Pow(item.Value - expected, 2) / expected;
                 }
             }
@@ -374,17 +475,17 @@ namespace Lab1
                 double rangeValue = 0;
                 foreach (KeyValuePair<Range, int> item in statistic.uninterruptedStatisticalDistribution)
                 {
-                    rangeValue = /*item.Key.end - (item.Key.end - item.Key.begin)/2*/ item.Key.end;
-                    expected = normalF(rangeValue, statistic) * statistic.variationRow.Length;
+                    rangeValue = Functions.MedValue(item.Key);
+                    expected = theoreticalValue(rangeValue, statistic);
                     x2 += Pow(item.Value - expected, 2) / expected;
                 }
             }
 
             return x2;
         }
-        public static bool IfTrue(double x2, double levelOf, int df)
+        public static bool IfTrue(double x2, double levelOf, int count)
         {
-            return x2 <= MathNet.Numerics.Distributions.ChiSquared.InvCDF(df, 1 - levelOf);
+            return x2 <= MathNet.Numerics.Distributions.ChiSquared.InvCDF(count - k, 1 - levelOf);
         }
     }
 
@@ -396,6 +497,10 @@ namespace Lab1
             {
                 array[i] = randomiser.Next(min, max + 1);
             }
+        }
+        public static double MedValue(Range range)
+        {
+            return range.end - 0.5 * (range.end - range.begin);
         }
     }
 

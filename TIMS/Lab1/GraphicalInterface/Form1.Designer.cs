@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.dataChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.minTextBox = new System.Windows.Forms.TextBox();
             this.maxTextBox = new System.Windows.Forms.TextBox();
@@ -49,23 +52,32 @@
             this.readToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.levelOfsignificanceTextBox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.calculateBautton = new System.Windows.Forms.Button();
+            this.mainValueTextBox = new System.Windows.Forms.TextBox();
+            this.additionalTextBox = new System.Windows.Forms.TextBox();
+            this.quantilRadioButton = new System.Windows.Forms.RadioButton();
+            this.momentRadioButton = new System.Windows.Forms.RadioButton();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.dataChart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.dataChart)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataChart2)).BeginInit();
             this.SuspendLayout();
             // 
             // dataChart
             // 
-            chartArea5.Name = "ChartArea1";
-            this.dataChart.ChartAreas.Add(chartArea5);
-            legend5.Name = "Legend1";
-            this.dataChart.Legends.Add(legend5);
+            chartArea1.Name = "ChartArea1";
+            this.dataChart.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.dataChart.Legends.Add(legend1);
             this.dataChart.Location = new System.Drawing.Point(35, 321);
             this.dataChart.Name = "dataChart";
-            series5.ChartArea = "ChartArea1";
-            series5.Legend = "Legend1";
-            series5.Name = "Series1";
-            this.dataChart.Series.Add(series5);
-            this.dataChart.Size = new System.Drawing.Size(810, 314);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.dataChart.Series.Add(series1);
+            this.dataChart.Size = new System.Drawing.Size(629, 314);
             this.dataChart.TabIndex = 0;
             this.dataChart.Text = "chart1";
             // 
@@ -193,7 +205,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(881, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1302, 24);
             this.menuStrip1.TabIndex = 14;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -208,7 +220,7 @@
             // readToolStripMenuItem
             // 
             this.readToolStripMenuItem.Name = "readToolStripMenuItem";
-            this.readToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.readToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.readToolStripMenuItem.Text = "Read";
             this.readToolStripMenuItem.Click += new System.EventHandler(this.readToolStripMenuItem_Click);
             // 
@@ -230,11 +242,106 @@
             this.label5.TabIndex = 16;
             this.label5.Text = "Level of significance";
             // 
+            // calculateBautton
+            // 
+            this.calculateBautton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.calculateBautton.Location = new System.Drawing.Point(924, 230);
+            this.calculateBautton.Name = "calculateBautton";
+            this.calculateBautton.Size = new System.Drawing.Size(127, 62);
+            this.calculateBautton.TabIndex = 17;
+            this.calculateBautton.Text = "Calculate";
+            this.calculateBautton.UseVisualStyleBackColor = true;
+            this.calculateBautton.Click += new System.EventHandler(this.calculateBautton_Click);
+            // 
+            // mainValueTextBox
+            // 
+            this.mainValueTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.mainValueTextBox.Location = new System.Drawing.Point(924, 172);
+            this.mainValueTextBox.Name = "mainValueTextBox";
+            this.mainValueTextBox.Size = new System.Drawing.Size(127, 29);
+            this.mainValueTextBox.TabIndex = 18;
+            // 
+            // additionalTextBox
+            // 
+            this.additionalTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.additionalTextBox.Location = new System.Drawing.Point(1099, 172);
+            this.additionalTextBox.Name = "additionalTextBox";
+            this.additionalTextBox.Size = new System.Drawing.Size(143, 29);
+            this.additionalTextBox.TabIndex = 19;
+            // 
+            // quantilRadioButton
+            // 
+            this.quantilRadioButton.AutoSize = true;
+            this.quantilRadioButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.quantilRadioButton.Location = new System.Drawing.Point(924, 66);
+            this.quantilRadioButton.Name = "quantilRadioButton";
+            this.quantilRadioButton.Size = new System.Drawing.Size(87, 28);
+            this.quantilRadioButton.TabIndex = 20;
+            this.quantilRadioButton.TabStop = true;
+            this.quantilRadioButton.Text = "Quantil";
+            this.quantilRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // momentRadioButton
+            // 
+            this.momentRadioButton.AutoSize = true;
+            this.momentRadioButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.momentRadioButton.Location = new System.Drawing.Point(1099, 66);
+            this.momentRadioButton.Name = "momentRadioButton";
+            this.momentRadioButton.Size = new System.Drawing.Size(97, 28);
+            this.momentRadioButton.TabIndex = 21;
+            this.momentRadioButton.TabStop = true;
+            this.momentRadioButton.Text = "Moment";
+            this.momentRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(921, 118);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(105, 24);
+            this.label6.TabIndex = 22;
+            this.label6.Text = "Main Value";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label7.Location = new System.Drawing.Point(1095, 118);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(147, 24);
+            this.label7.TabIndex = 23;
+            this.label7.Text = "Additional Value";
+            // 
+            // dataChart2
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.dataChart2.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.dataChart2.Legends.Add(legend2);
+            this.dataChart2.Location = new System.Drawing.Point(697, 321);
+            this.dataChart2.Name = "dataChart2";
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.dataChart2.Series.Add(series2);
+            this.dataChart2.Size = new System.Drawing.Size(572, 314);
+            this.dataChart2.TabIndex = 24;
+            this.dataChart2.Text = "chart1";
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(881, 665);
+            this.ClientSize = new System.Drawing.Size(1302, 665);
+            this.Controls.Add(this.dataChart2);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.momentRadioButton);
+            this.Controls.Add(this.quantilRadioButton);
+            this.Controls.Add(this.additionalTextBox);
+            this.Controls.Add(this.mainValueTextBox);
+            this.Controls.Add(this.calculateBautton);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.levelOfsignificanceTextBox);
             this.Controls.Add(this.outputTextBox);
@@ -257,6 +364,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataChart)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataChart2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -282,6 +390,14 @@
         private System.Windows.Forms.ToolStripMenuItem readToolStripMenuItem;
         private System.Windows.Forms.TextBox levelOfsignificanceTextBox;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button calculateBautton;
+        private System.Windows.Forms.TextBox mainValueTextBox;
+        private System.Windows.Forms.TextBox additionalTextBox;
+        private System.Windows.Forms.RadioButton quantilRadioButton;
+        private System.Windows.Forms.RadioButton momentRadioButton;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.DataVisualization.Charting.Chart dataChart2;
     }
 }
 

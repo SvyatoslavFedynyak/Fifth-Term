@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Math;
+using MathNet.Numerics;
 
 namespace Lab2
 {
+    #region Old
     static class Functions
     {
         public static int CharToInt(char letter)
@@ -16,128 +18,6 @@ namespace Lab2
         public static char IntToChar(int value)
         {
             return (char)(value + 97);
-        }
-    }
-    public class Matrix
-    {
-        int numOfRows;
-        int numOfColls;
-        double[,] items;
-        public int Rang
-        {
-            get
-            {
-                if (numOfColls == numOfRows)
-                {
-                    return numOfRows;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        }
-        public Matrix(double[,] arr)
-        {
-            items = arr;
-            numOfColls = arr.GetLength(1);
-            numOfRows = arr.GetLength(0);
-        }
-        public Matrix(int[] arr)
-        {
-            items = new double[1, arr.Length];
-            for (int i = 0; i < arr.Length; i++)
-            {
-                items[0, i] = arr[i];
-            }
-            numOfColls = arr.Length;
-            numOfRows = 1;
-        }
-        public Matrix(int numOfRows, int numOfColls)
-        {
-            items = new double[numOfRows, numOfColls];
-            this.numOfRows = numOfRows;
-            this.numOfColls = numOfColls;
-        }
-        public double this[int row, int col]
-        {
-            get
-            {
-                return items[row, col];
-            }
-            set { items[row, col] = value; }
-        }
-        public static Matrix operator *(Matrix first, Matrix second)
-        {
-            int resultMatrixColls, resultMatrixRows;
-            #region Result Matrix Size Check
-            if (first.numOfColls >= second.numOfColls)
-            {
-                resultMatrixColls = second.numOfColls;
-            }
-            else
-            {
-                resultMatrixColls = first.numOfColls;
-            }
-            if (first.numOfRows >= second.numOfRows)
-            {
-                resultMatrixRows = second.numOfRows;
-            }
-            else
-            {
-                resultMatrixRows = first.numOfRows;
-            }
-            #endregion
-            int mod = 25;
-            Matrix result = new Matrix(resultMatrixRows, resultMatrixColls);
-            double resultElement = 0;
-            for (int i = 0; i < resultMatrixRows; i++)
-            {
-                for (int j = 0; j < resultMatrixColls; j++)
-                {
-                    for (int k = 0; k < resultMatrixColls; k++)
-                    {
-                        resultElement += (first[i, k] * second[k, j]) % mod;
-                    }
-                    result[i, j] = resultElement % mod;
-                    resultElement = 0;
-                }
-            }
-            return result;
-        }
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < numOfRows; i++)
-            {
-                for (int j = 0; j < numOfColls; j++)
-                {
-                    sb.AppendFormat($"{items[i, j]} ");
-                }
-                sb.AppendLine();
-            }
-            return sb.ToString();
-        }
-        public int[] ToArr()
-        {
-            int[] result = new int[numOfColls];
-            for (int i = 0; i < numOfColls; i++)
-            {
-                result[i] = (int)items[0, i];
-            }
-            return result;
-        }
-        public Matrix Copy()
-        {
-            Matrix result = new Matrix(numOfRows, numOfColls);
-            for (int i = 0; i < numOfRows; i++)
-            {
-                for (int j = 0; j < numOfRows; j++)
-                {
-                    result[i, j] = this[i, j];
-                }
-            }
-            return result;
         }
     }
     static class HillCryptographer
@@ -214,8 +94,11 @@ namespace Lab2
 
             return string.Join(null, resultLines);
         }
-    }
+    }//old 
+    #endregion
 
+
+    static 
 
     class Program
     {

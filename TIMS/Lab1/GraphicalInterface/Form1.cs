@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using Lab1;
+using static System.Math;
 
 namespace GraphicalInterface
 {
@@ -66,8 +67,79 @@ namespace GraphicalInterface
             double x2Temp;
             StringBuilder outputStringBuilder = new StringBuilder();
 
-            dataChart.Series[0] = new System.Windows.Forms.DataVisualization.Charting.Series("Variation Row");
-            dataChart.Series[0].Points.DataBindXY(null, analiser.variationRow);
+
+            if (analiser.type == StatisticVariableType.Discrete)
+            {
+                #region Poligon
+                dataChart2.Series[0] = new System.Windows.Forms.DataVisualization.Charting.Series("Frequency Distribution");
+                dataChart2.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+                List<double> frequencyList = new List<double>();
+                List<double> valueList = new List<double>();
+                foreach (KeyValuePair<double, double> item in analiser.frequencyDistribution)
+                {
+                    frequencyList.Add(item.Value);
+                    valueList.Add(item.Key);
+                }
+                dataChart2.Series[0].Points.DataBindXY(valueList.ToArray(), frequencyList.ToArray());
+                #endregion
+
+                #region Diagram
+                dataChart.Series[0] = new System.Windows.Forms.DataVisualization.Charting.Series("Frequency Distribution");
+                dataChart.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                dataChart.ChartAreas[0].AxisX.Interval = Round(analiser.numValues.swing / analiser.statisticalDistribution.Count - 1, 2);
+                frequencyList.Clear();
+                valueList.Clear();
+                foreach (KeyValuePair<double, double> item in analiser.frequencyDistribution)
+                {
+                    frequencyList.Add(item.Value);
+                    valueList.Add(item.Key);
+                }
+                dataChart.Series[0].Points.DataBindXY(valueList.ToArray(), frequencyList.ToArray());
+                #endregion
+            }
+            else
+            {
+                #region Polygon
+                dataChart.Series[0] = new System.Windows.Forms.DataVisualization.Charting.Series("Frequency Distribution");
+                dataChart.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                dataChart.ChartAreas[0].AxisX.Interval = Round(analiser.numValues.swing / 10, 2);
+                List<double> rangeList = new List<double>();
+                rangeList.Add(0);
+                List<double> frequencyList = new List<double>();
+                frequencyList.Add(0);
+                foreach (KeyValuePair<Range, double> item in analiser.uninterruptedFrequencyDistribution)
+                {
+                    frequencyList.Add(item.Value);
+                    rangeList.Add(Functions.MedValue(item.Key));
+                }
+                dataChart.Series[0].Points.DataBindXY(rangeList.ToArray(), frequencyList.ToArray());
+                #endregion
+
+                #region Gistogram
+                dataChart2.Series[0] = new System.Windows.Forms.DataVisualization.Charting.Series("Frequency Distribution");
+                //dataChart2.ChartAreas[0].AxisX.Interval = Round(analiser.numValues.swing / 10, 2);
+                frequencyList.Clear();
+                rangeList.Clear();
+                foreach (KeyValuePair<Range, double> item in analiser.uninterruptedFrequencyDistribution)
+                {
+                    frequencyList.Add(item.Value);
+                    rangeList.Add(Functions.MedValue(item.Key));
+                }
+                dataChart2.Series[0].Points.DataBindXY(rangeList.ToArray(), frequencyList.ToArray()); 
+                #endregion
+            }
+
+
+
+            if (analiser.type == StatisticVariableType.Discrete)
+            {
+                outputStringBuilder.AppendLine("Variation row: \n");
+                foreach (double item in analiser.variationRow)
+                {
+                    outputStringBuilder.AppendFormat($"{item} ");
+                }
+                outputStringBuilder.AppendLine(); 
+            }
 
             if (analiser.type == StatisticVariableType.Discrete)
             {
@@ -108,12 +180,12 @@ namespace GraphicalInterface
 
                 outputStringBuilder.AppendLine("\nCheck by Pirson for normal distribution: \n");
 
-                outputStringBuilder.AppendLine($"D.F = {analiser.statisticalDistribution.Count - 1}");
+                outputStringBuilder.AppendLine($"D.F = {analiser.statisticalDistribution.Count - 3}");
                 x2Temp = PirsonChecker.Check(analiser);
                 outputStringBuilder.AppendLine($"X2 = {x2Temp}");
                 if (levelOfsignificanceTextBox.Text != "")
                 {
-                    outputStringBuilder.AppendLine($"The correctness of hypothesis: {PirsonChecker.IfTrue(x2Temp, Convert.ToDouble(levelOfsignificanceTextBox.Text), analiser.statisticalDistribution.Count - 1)}");
+                    outputStringBuilder.AppendLine($"The correctness of hypothesis: {PirsonChecker.IfTrue(x2Temp, Convert.ToDouble(levelOfsignificanceTextBox.Text), analiser.statisticalDistribution.Count)}");
                 }
                 else
                 {
@@ -141,12 +213,12 @@ namespace GraphicalInterface
                 addNumValues(outputStringBuilder);
 
                 outputStringBuilder.AppendLine("\nCheck by Pirson for normal distribution: \n");
-                outputStringBuilder.AppendLine($"D.F = {analiser.uninterruptedStatisticalDistribution.Count - 1}");
+                outputStringBuilder.AppendLine($"D.F = {analiser.uninterruptedStatisticalDistribution.Count - 3}");
                 x2Temp = PirsonChecker.Check(analiser);
                 outputStringBuilder.AppendLine($"X2 = {x2Temp}");
                 if (levelOfsignificanceTextBox.Text != "")
                 {
-                    outputStringBuilder.AppendLine($"The correctness of hypothesis: {PirsonChecker.IfTrue(x2Temp, Convert.ToDouble(levelOfsignificanceTextBox.Text), analiser.uninterruptedStatisticalDistribution.Count - 1)}"); 
+                    outputStringBuilder.AppendLine($"The correctness of hypothesis: {PirsonChecker.IfTrue(x2Temp, Convert.ToDouble(levelOfsignificanceTextBox.Text), analiser.uninterruptedStatisticalDistribution.Count)}");
                 }
                 else
                 {
@@ -161,24 +233,33 @@ namespace GraphicalInterface
         {
             outputStringBuilder.AppendLine("Medium value:");
             outputStringBuilder.AppendLine(analiser.numValues.medium.ToString());
+            outputStringBuilder.AppendLine("Deviation, Dv:");
+            outputStringBuilder.AppendLine(analiser.numValues.deviation.ToString());
+            outputStringBuilder.AppendLine("Variance, s2:");
+            outputStringBuilder.AppendLine(analiser.numValues.variance.ToString());
+            outputStringBuilder.AppendLine("Standart, s:");
+            outputStringBuilder.AppendLine(analiser.numValues.standart.ToString());
+            outputStringBuilder.AppendLine("Variation, u:");
+            outputStringBuilder.AppendLine(analiser.numValues.variation.ToString());
             outputStringBuilder.AppendLine("Swing, r:");
             outputStringBuilder.AppendLine(analiser.numValues.swing.ToString());
-            outputStringBuilder.AppendLine("Dispersion, Db:");
-            outputStringBuilder.AppendLine(analiser.numValues.dispersion.ToString());
+            //outputStringBuilder.AppendLine("Dispersion, Db:");
+            //outputStringBuilder.AppendLine(analiser.numValues.dispersion.ToString());
             outputStringBuilder.AppendLine("Assimetrion coef, Ab:");
             outputStringBuilder.AppendLine(analiser.numValues.assimetricCoef.ToString());
             outputStringBuilder.AppendLine("Medium kvadr, Qb:");
             outputStringBuilder.AppendLine(analiser.numValues.mediumKvadr.ToString());
-            outputStringBuilder.AppendLine("Fixed dispersion, s2:");
-            outputStringBuilder.AppendLine(analiser.numValues.fixedDispersion.ToString());
-            outputStringBuilder.AppendLine("Fixed medium kvadr, s:");
-            outputStringBuilder.AppendLine(analiser.numValues.fixedMediumKvadr.ToString());
-            outputStringBuilder.AppendLine("Variation coef, V:");
-            outputStringBuilder.AppendLine(analiser.numValues.variationCoef.ToString());
-            outputStringBuilder.AppendLine("Cvantil, Q:");
-            outputStringBuilder.AppendLine(analiser.numValues.cvantil.ToString());
+            //outputStringBuilder.AppendLine("Fixed dispersion, s2:");
+            //outputStringBuilder.AppendLine(analiser.numValues.fixedDispersion.ToString());
+            //outputStringBuilder.AppendLine("Fixed medium kvadr, s:");
+            //outputStringBuilder.AppendLine(analiser.numValues.fixedMediumKvadr.ToString());
+            //outputStringBuilder.AppendLine("Variation coef, V:");
+            //outputStringBuilder.AppendLine(analiser.numValues.variationCoef.ToString());
+            //outputStringBuilder.AppendLine("Cvantil, Q:");
+            //outputStringBuilder.AppendLine(analiser.numValues.cvantil.ToString());
             outputStringBuilder.AppendLine("Ecscess, Eb:");
             outputStringBuilder.AppendLine(analiser.numValues.ecscess.ToString());
+           
         }
 
         private void readToolStripMenuItem_Click(object sender, EventArgs e)
@@ -203,6 +284,27 @@ namespace GraphicalInterface
             }
             data = tempList.ToArray();
             showDataInChart();
+        }
+
+        private void calculateBautton_Click(object sender, EventArgs e)
+        {
+            if (momentRadioButton.Checked)
+            {
+                outputTextBox.Text = analiser.Moment(Convert.ToDouble(mainValueTextBox.Text), Convert.ToInt32(additionalTextBox.Text)).ToString();
+            }
+            else if(quantilRadioButton.Checked)
+            {
+                bool pres;
+                double res = analiser.Quantil(Convert.ToInt32(mainValueTextBox.Text), out pres);
+                if (pres)
+                {
+                    outputTextBox.Text = string.Format($"{mainValueTextBox.Text} Quantil = {res}");
+                }
+                else
+                {
+                    outputTextBox.Text = "There aren't quantil like that";
+                }
+            }
         }
     }
 }
