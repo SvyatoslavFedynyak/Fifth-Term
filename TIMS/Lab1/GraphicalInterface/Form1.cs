@@ -86,10 +86,10 @@ namespace GraphicalInterface
                 #region Diagram
                 dataChart.Series[0] = new System.Windows.Forms.DataVisualization.Charting.Series("Frequency Distribution");
                 dataChart.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-                dataChart.ChartAreas[0].AxisX.Interval = Round(analiser.numValues.swing / analiser.statisticalDistribution.Count - 1, 2);
+                dataChart.ChartAreas[0].AxisX.Interval = Round(analiser.numValues.swing / analiser.statisticalDistribution.Count, 2);
                 frequencyList.Clear();
                 valueList.Clear();
-                foreach (KeyValuePair<double, double> item in analiser.frequencyDistribution)
+                foreach (KeyValuePair<double, int> item in analiser.statisticalDistribution)
                 {
                     frequencyList.Add(item.Value);
                     valueList.Add(item.Key);
@@ -107,7 +107,7 @@ namespace GraphicalInterface
                 rangeList.Add(0);
                 List<double> frequencyList = new List<double>();
                 frequencyList.Add(0);
-                foreach (KeyValuePair<Range, double> item in analiser.uninterruptedFrequencyDistribution)
+                foreach (KeyValuePair<Range, int> item in analiser.uninterruptedStatisticalDistribution)
                 {
                     frequencyList.Add(item.Value);
                     rangeList.Add(Functions.MedValue(item.Key));
@@ -117,7 +117,8 @@ namespace GraphicalInterface
 
                 #region Gistogram
                 dataChart2.Series[0] = new System.Windows.Forms.DataVisualization.Charting.Series("Frequency Distribution");
-                //dataChart2.ChartAreas[0].AxisX.Interval = Round(analiser.numValues.swing / 10, 2);
+                dataChart2.ChartAreas[0].AxisX.Crossing = 0;
+                dataChart2.ChartAreas[0].AxisX.Interval = Round(analiser.numValues.swing / 20, 2);
                 frequencyList.Clear();
                 rangeList.Clear();
                 foreach (KeyValuePair<Range, double> item in analiser.uninterruptedFrequencyDistribution)
