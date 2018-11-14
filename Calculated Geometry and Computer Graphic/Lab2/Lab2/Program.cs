@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using InstansesLibrary;
 using static System.Math;
+using MathNet;
 
 namespace Lab2
 {
@@ -62,12 +63,16 @@ namespace Lab2
         {
             return new Coord(-target.x, -target.y, -target.z);
         }
+        public static Coord operator *(double second, Coord first)
+        {
+            return new Coord(first.x * second, first.y * second, first.z * second);
+        }
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat($"{x} ");
+            sb.AppendFormat($"[{x} ");
             sb.AppendFormat($"{y} ");
-            sb.AppendFormat($"{z} ");
+            sb.AppendFormat($"{z}] ");
             return sb.ToString();
         }
     }
@@ -181,6 +186,15 @@ namespace Lab2
             }
             return res;
         }
+        public static Coord GetQ(Matrix first, CoordinateMatrix second, Matrix third)
+        {
+            CoordinateMatrix res1 = new CoordinateMatrix(1, 3);
+            for (int i = 0; i < 3; i++)
+            {
+                res1[0, i] = first[0, 0] * second[0, i] + first[0, 1] * second[1, i] + first[0, 2] * second[2, i];
+            }
+            return (third[0, 0] * res1[0, 0] + third[1, 0] * res1[0, 1] + third[2, 0] * res1[0, 2]);
+        }
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -210,60 +224,112 @@ namespace Lab2
     public static class LinearSurfaceBuilder
     {
         static CoordinateMatrix pMatrix = new CoordinateMatrix(3, 3);
-        static CoordinateMatrix SurfaceMatrix;
-        static private CoordinateMatrix Build(int iterations, InputData inData)
+        static double u0start, u0end, v0start, v0end, u1start, u1end, v1start, v1end;
+        static public CoordinateMatrix Build(int iterations, EdgePoints edgePoints)
         {
-            //u => p00->p10
-            //v => p01->p11
-            //  pMatrix[0, 0] = -inData.p0vSlaym[0];
+            //P(u, 0) = p00 -> p10
+            //P(u, 1) = p01 -> p11
+            //P(0, v) = p00 -> p01
+            //P(1, v) = p10 -> p11
 
-            return null;
-        }
-        static public Coord Q(double u, double v)
-        {
+            double u0start, u0end, v0start, v0end, u1start, u1end, v1start, v1end;
+            u0start = U(edgePoints.p00);
+            u0end = U(edgePoints.p10);
+            v0start = V(edgePoints.p00);
+            v0end = V(edgePoints.p01);
+            u1start = U(edgePoints.p01);
+            u1end = U(edgePoints.p11);
+            v1start = V(edgePoints.p10);
+            v1end = V(edgePoints.p11);
 
 
-            return new Coord(1, 1, 1);
+            //double u0step, u1step, v0step, v1step;
+            //u0step = (u0end - u0start) / (iterations - 1);
+            //u1step = (u1end - u1start) / (iterations - 1);
+            //v0step = (v0end - v0start) / (iterations - 1);
+            //v1step = (u1end - u1start) / (iterations - 1);
+            //double u0 = u0start, u1 = u1start, v0 = v0start, v1 = v1start;
+
+            pMatrix[0, 0] = edgePoints.p00;
+            pMatrix[0, 1] = edgePoints.p01;
+            pMatrix[1, 0] = edgePoints.p10;
+            pMatrix[1, 1] = edgePoints.p11;
+            pMatrix[2, 2] = new Coord(0, 0, 0);
+
+            double step = (double)1 / (iterations - 1);
+            double u = 0, v = 0;
+            CoordinateMatrix res = new CoordinateMatrix(iterations, iterations);
+            for (int i = 0; i < iterations; i++)
+            {
+                for (int j = 0; j < iterations; j++)
+                {
+                    res[i, j] = Q(u, v, edgePoints);
+                    v += step;
+                }
+                v = 0;
+                u += step;
+            }
+            #region Test
+            //Console.WriteLine(Q(0, 0, edgePoints));
+            //Console.WriteLine(Q(1, 0, edgePoints));
+            //Console.WriteLine(Q(0, 1, edgePoints));
+            //Console.WriteLine(Q(1, 1, edgePoints));
+            //Console.WriteLine(Q(0.5, 0.5, edgePoints));
+            //Console.WriteLine(Q(0.25, 0.25, edgePoints));
+            #endregion
+
+            return res;
         }
-        static private Coord Puo(double u, double v)
+        static public Coord Q(double u, double v, EdgePoints edgePoints)
         {
-            return new Coord(1, 1, 1);
+            Matrix first = new Matrix(new double[,] { { 1 - u, u, 1 } });
+            //pMatrix[0, 2] = P(0, v);
+            //pMatrix[1, 2] = P(1, v);
+            //pMatrix[2, 0] = P(u, 0);
+            //pMatrix[2, 1] = P(u, 1);
+            pMatrix[0, 2] = P(0, v, v0start, v0end);
+            pMatrix[1, 2] = P(1, v, v1start, v1end);
+            pMatrix[2, 0] = P(u, 0, u0start, u0end);
+            pMatrix[2, 1] = P(u, 1, u1start, u1end);
+            Matrix third = new Matrix(new double[,]
+            {
+                {1-v },
+                {v },
+                {1 }
+            });
+            return CoordinateMatrix.GetQ(first, pMatrix, third);
         }
-        static private Coord Pu1(double u, double v)
+        static private Coord P(double u, double v, double start, double end)
         {
-            return new Coord(1, 1, 1);
+            //double x, y, z;
+            //x = (1 - u) * v;
+            //y = (1 - u) * (1 - v);
+            //z = (1 - v) * u;
+            //return new Coord(x, y, z);
+
+            double x, y, z;
+            x = start + ((1 - u) * v) * (end - start);
+            y = start + (1 - u) * (1 - v) * (end - start);
+            z = start + (1 - v) * u * (end - start);
+            return new Coord(x, y, z);
+
         }
-        static private Coord P0v(double u, double v)
+        static private double U(Coord target)
         {
-            return new Coord(1, 1, 1);
+            return 1 - target.x - target.y;
         }
-        static private Coord P1v(double u, double v)
+        static private double V(Coord target)
         {
-            return new Coord(1, 1, 1);
+            return 1 - target.y - target.z;
         }
+
     }
 
     class Program
     {
         static void Main(string[] args)
         {
-            Coord first = new Coord(0.5, 0.5, 1);
-            CoordinateMatrix second = new CoordinateMatrix(new Coord[,]
-            {
-                {-new Coord(0, 0, 3), -new Coord(0, 0, 0), new Coord(0, 1, 1.5) },
-                {- new Coord(3, 0, 3), -new Coord(3, 0, 0), new Coord(3, 1, 1.875)},
-                {new Coord(1.875, 1, 3), new Coord(1.5, 1, 0), new Coord(0, 0, 0) }
-            });
-            Matrix third = new Matrix(new double[,]
-            {
-                {0.5, 0.5, 1 }
-                //{0.5 },
-                //{1 }
-            });
-            Matrix res1 = first * second;
-            Console.WriteLine(res1);
-            Coord res2 = Functions.MatrixToCoord(res1 * third);
-            Console.WriteLine(res2);
+            Console.WriteLine(LinearSurfaceBuilder.Build(5, new EdgePoints(new Coord(0, 4, 4), new Coord(0, 0, 4), new Coord(4, 4, 4), new Coord(4, 0, 0))).ToString());
             Console.ReadLine();
         }
     }
