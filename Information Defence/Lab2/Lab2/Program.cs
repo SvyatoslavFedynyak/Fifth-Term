@@ -483,27 +483,47 @@ namespace Lab2
             }
             return res;
         }
+        public static bool IfSimple(int value)
+        {
+            for (int i = 2; i < (int)Sqrt(value); i++)
+            {
+                if (value % i == 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         static void Main(string[] args)
         {
-            string alphabet = "qwertyuiopasdfghjklzxcvbnm ", code, cryptWord, message, decode;
+            string alphabet = "qwertyuiopasdfghjklzxcvbnm ", code, message, decode;
+            int p, q, x;
             Random randomiser = new Random();
             Alphabet eng = new Alphabet(alphabet);
             Console.WriteLine("Enter message");
             message = Console.ReadLine();
-            Console.WriteLine("Enter crypt word");
-            cryptWord = Console.ReadLine();
-            HillCipher hillChiper = new HillCipher(eng, cryptWord);
-            uint[] gammaKey = GetRandomKey(eng.Lenght, randomiser);
-            GammaCipher gammachiper = new GammaCipher(eng, gammaKey);
-            code = hillChiper.Encrypt(message);
+
+            do
+            {
+                p = randomiser.Next(99, 1000);
+
+            } while (p % 4 != 3 || !IfSimple(p));
+            do
+            {
+                q = randomiser.Next(99, 1000);
+
+            } while (q % 4 != 3 || !IfSimple(q));
+            do
+            {
+                x = randomiser.Next(99, 1000);
+            } while (x % 2 != 0);
+            BBS bbs = new BBS(p, q, x);
+            BBSCipher bbsChiper = new BBSCipher(eng, bbs);
+
+            code = bbsChiper.Encrypt(message);
             Console.WriteLine($"Code is: \n{code}");
-            decode = hillChiper.Decrypt(code);
-            Console.WriteLine($"Decode is: \n{decode}");
-            Console.WriteLine("For Gamma Chiper:");
-            code = gammachiper.Encrypt(message);
-            Console.WriteLine($"Code is: \n{code}");
-            decode = gammachiper.Decrypt(code);
+            decode = bbsChiper.Decrypt(code);
             Console.WriteLine($"Decode is: \n{decode}");
             Console.ReadLine();
         }
