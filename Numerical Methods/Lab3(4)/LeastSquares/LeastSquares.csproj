@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{818B5D5B-81C0-4D2A-A696-8DEA75148760}</ProjectGuid>
+    <ProjectGuid>{9797F1D4-E20A-426A-B1E4-9945FDBC23C5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Graphics</RootNamespace>
-    <AssemblyName>Graphics</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <RootNamespace>LeastSquares</RootNamespace>
+    <AssemblyName>LeastSquares</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FancyControls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\FancyControls.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
@@ -47,16 +51,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\CalcMistake.cs" />
+    <Compile Include="Models\FunctionApproximationBase.cs" />
+    <Compile Include="Models\Math\GaussSole.cs" />
+    <Compile Include="Models\InterpolationMethods.cs" />
+    <Compile Include="Models\LeastSquaresMethod.cs" />
+    <Compile Include="Models\NumericalIntegrationMethod.cs" />
+    <Compile Include="Models\NumericalMethodBase.cs" />
+    <Compile Include="Models\Struct\GaussPoly.cs" />
+    <Compile Include="Models\Struct\MethodsResult.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -81,14 +94,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Lab3%284%29\LeastSquares\LeastSquares.csproj">
-      <Project>{9797f1d4-e20a-426a-b1e4-9945fdbc23c5}</Project>
-      <Name>LeastSquares</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Lab2\Lab2.csproj">
-      <Project>{c7feb7f2-bf63-4a3d-802c-44a51a59eb7b}</Project>
-      <Name>Lab2</Name>
-    </ProjectReference>
+    <Content Include="dll\FancyControls.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
